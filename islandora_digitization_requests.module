@@ -1,0 +1,95 @@
+<?php
+
+/**
+ * @file
+ * Module code for Islandora Digitization Requests module.
+ */
+
+define('ISLANDORA_DIGITIZATION_REQUESTS', 'digitization requests access');
+define('ISLANDORA_DIGITIZATION_REQUESTS_MANAGE', 'digitization requests manage');
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_digitization_requests_menu() {
+  // the "admin user" (usually ISLANDORA_DIGITAL_WORKFLOW) menu handlers:
+  return array(
+    'admin/islandora/tools/islandora_digitization_requests' => array(
+      'title' => t('Islandora Digitization Requests'),
+      'description' => 'Settings for the Islandora Digitization Requests module.',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_digitization_requests_admin_form'),
+      'access arguments' => array(ISLANDORA_DIGITIZATION_REQUESTS_MANAGE),
+      'file' => 'includes/admin.form.inc',
+    ),
+    'islandora/islandora_digitization_requests/request/%' => array(
+      'type' => MENU_SUGGESTED_ITEM,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_digitization_requests_goto_request', 3),
+      'access arguments' => array(ISLANDORA_DIGITIZATION_REQUESTS),
+    ),
+  );
+}
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_digitization_requests_permission() {
+  $static_permissions = array(
+    ISLANDORA_DIGITIZATION_REQUESTS => array(
+      'title' => t('Use the Islandora Digitization Requests system.'),
+      'description' => t('User can access and use the Islandora Digitization Requests system.'),
+    ),
+    ISLANDORA_DIGITIZATION_REQUESTS_MANAGE => array(
+      'title' => t('Manage Islandora Digitization Requests'),
+      'description' => t('User can manage the Islandora Digitization Requests configuration settings'),
+    ),
+  );
+  return $static_permissions;
+}
+
+/**
+ * Implements hook_theme()
+ */
+function islandora_digitization_requests_theme() {
+  return array(
+    'islandora_digitization_requests_search_result' => array(
+      'template' => 'theme/islandora-digitization-request-search-result',
+      'variables' => array(
+        'data' => array(),
+      ),
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_preprocess_html().
+ *
+ * This code will remove the sidebar and must check to see whether or not the path is on a user page.
+ */
+function islandora_digitization_requests_preprocess_html(&$vars) {
+  $item = menu_get_item();
+  if (is_array($item)) {
+    $path = drupal_get_path('module', 'islandora_digitization_requests');
+    if ($item['path'] == 'admin/islandora/tools/islandora_digitization_requests') {
+      drupal_add_css($path . '/css/islandora_digitization_requests.css');
+    }
+  }
+}
+
+/**
+ * Implementation of hook_views_api().
+ */
+function islandora_digitization_requests_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'islandora_digitization_requests'),
+  );
+}
+
+function islandora_digitization_requests_goto_request($scan_request_id) {
+  drupal_set_message(t('In "islandora_digitization_requests_goto_request", ' .
+      'for scan_request_id = @scan_request_id, jumped to /islandora', array('@scan_request_id' => $scan_request_id)));
+  drupal_goto('islandora');
+}

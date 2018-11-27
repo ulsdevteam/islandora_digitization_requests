@@ -1,0 +1,19 @@
+/* 
+    Created on : Nov 27, 2018, 4:19:40 PM
+    Author     : BGILLING
+*/
+
+.action-links {
+    padding: 0;
+}
+
+ul.action-links a {
+    padding-left: 15px;
+    line-height: 30px;
+    background: transparent url("../images/add.png") no-repeat 0 center;
+}
+
+.light_text {
+    color: #777;
+    font-weight: normal;
+}

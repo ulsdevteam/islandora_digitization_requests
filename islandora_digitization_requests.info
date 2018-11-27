@@ -1,0 +1,10 @@
+name = Islandora Digitization Requests
+package = Islandora Tools
+description = To integrate digitization requests using the Webforms modules.
+version = 7.x
+core = 7.x
+
+# Several Drupal core modules that must be enabled in order to use:
+dependencies[] = webform
+
+configure = admin/islandora/tools/islandora_digitization_requests

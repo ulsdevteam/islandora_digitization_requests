@@ -42,6 +42,7 @@ function islandora_digitization_requests_admin_form() {
 
   $link_attributes = array('attributes'=>array('target' => '_blank'));
   foreach ($webforms as $nid => $webform_arr) {
+    $searchable_fields = islandora_digitization_requests_test_search($nid);
     $search_options = array();
     $form_components = islandora_digitization_requests_webform_components($nid);
 
@@ -59,7 +60,8 @@ function islandora_digitization_requests_admin_form() {
       'webform_' . $nid . '_searchfields_wrapper' => array(
         '#type' => 'fieldset',
         '#title' => 'Search fields',
-        '#description' => 'Select which fields from this Webform are include in the search operation',
+        '#description' => '<p>Select which fields from this Webform are include in the search operation. ' .
+          '</p><span><b>Configured search fields: </b>' . implode(', ', $searchable_fields) . '</span>',
         '#collapsible' => TRUE,
         '#collapsed' => FALSE,
         // The individual form field components are enumerated in the loop below.
@@ -72,10 +74,7 @@ function islandora_digitization_requests_admin_form() {
         '#description' => 'Select the mappings for fields converted into a Digital Workflow batch records.',
         '#collapsible' => TRUE,
         '#collapsed' => FALSE,
-        'bar_' . $nid => array(
-            '#type' => 'item',
-            '#markup' => 'NODE ' . $nid,
-        ),
+        // The individual form field components are enumerated in the loop below.
       );
     }
 
@@ -98,24 +97,6 @@ function islandora_digitization_requests_admin_form() {
       }
     }
   }
-
-  // Selected Webform forms
-  $form['extra_options'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Extra options'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-    'islandora_hook' => array(
-      '#type' => 'item',
-      '#title' => t('Handle the foo'),
-      'foo' => array(
-        '#type' => 'checkbox',
-        '#title' => 'Handle foo?',
-        '#description' => 'When this is checked, the code will handle foo for it.',
-        '#default_value' => variable_get('islandora_digitization_requests_foo', 0),
-      ),
-    ),
-  );
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -141,10 +122,8 @@ function islandora_digitization_requests_admin_form_submit(array $form, array &$
   $id = $form_state['triggering_element']['#id'];
   switch ($id) {
     case 'edit-submit':
-      variable_set('islandora_digitization_requests_foo', $form_state['values']['foo']);
-
-      // Now loop through the available webforms and make an array of values 
-      // that corresponds to the checkbox names and their values.
+      // Loop through the available webforms and make an array of values that
+      // corresponds to the checkbox names and their values.
       module_load_include('inc', 'islandora_digitization_requests', 'includes/db');
       $webforms = islandora_digitization_requests_get_webforms();
       $digitization_request_options = array();

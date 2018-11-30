@@ -22,12 +22,6 @@ function islandora_digitization_requests_menu() {
       'access arguments' => array(ISLANDORA_DIGITIZATION_REQUESTS_MANAGE),
       'file' => 'includes/admin.form.inc',
     ),
-    'islandora/islandora_digitization_requests/request/%' => array(
-      'type' => MENU_SUGGESTED_ITEM,
-      'page callback' => 'drupal_get_form',
-      'page arguments' => array('islandora_digitization_requests_goto_request', 3),
-      'access arguments' => array(ISLANDORA_DIGITIZATION_REQUESTS),
-    ),
   );
 }
 
@@ -47,21 +41,6 @@ function islandora_digitization_requests_permission() {
   );
   return $static_permissions;
 }
-
-/**
- * Implements hook_theme()
- */
-function islandora_digitization_requests_theme() {
-  return array(
-    'islandora_digitization_requests_search_result' => array(
-      'template' => 'theme/islandora-digitization-request-search-result',
-      'variables' => array(
-        'data' => array(),
-      ),
-    ),
-  );
-}
-
 
 /**
  * Implements hook_preprocess_html().
@@ -86,10 +65,4 @@ function islandora_digitization_requests_views_api() {
     'api' => 3,
     'path' => drupal_get_path('module', 'islandora_digitization_requests'),
   );
-}
-
-function islandora_digitization_requests_goto_request($scan_request_id) {
-  drupal_set_message(t('In "islandora_digitization_requests_goto_request", ' .
-      'for scan_request_id = @scan_request_id, jumped to /islandora', array('@scan_request_id' => $scan_request_id)));
-  drupal_goto('islandora');
 }

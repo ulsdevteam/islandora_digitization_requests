@@ -5,6 +5,14 @@
  * Set of database functions that used throughout the module code.
  */
 
+/**
+ * This returns all Webforms within the current site - regardless of whether 
+ * or not they are configured to be "Digitization Requests"
+ *
+ * @return array of key-value pairs where each has each Webform reference as the
+ * node's nid value stores that array:
+ *   $node->nid => array('title' => $webform_title).
+ */
 function islandora_digitization_requests_get_webforms() {
   module_load_include('module', 'webform', 'webform');
   $webforms = array();
@@ -25,6 +33,16 @@ function islandora_digitization_requests_get_webforms() {
   return $webforms;
 }
 
+/**
+ * Returns which Webforms have been configured to be "Digitization Requests".
+ *
+ * @param array $webforms
+ *   Array of key-value pairs where each has each Webform reference as the
+ * node's nid value stores that array:
+ *   $node->nid => array('title' => $webform_title).
+ * @return array of key-value
+ *   $nid => $title
+ */
 function islandora_digitization_requests_get_scan_request_webforms($webforms) {
   // Get the configuration -- to check each of the webform nodes to see whether
   // or not they are selected as "Digitization Request Webforms".
@@ -38,6 +56,17 @@ function islandora_digitization_requests_get_scan_request_webforms($webforms) {
   return $filtered_webforms;
 }
 
+/**
+ * Returns the components (fields) that are used for a given Webform.
+ *
+ * The given Webform is referenced by its node->nid value.  The fieldset
+ * components are filtered out.
+ *
+ * @param integer $nid
+ *   The related $nid for the Webform in question
+ * @return array
+ *   Webform component objects
+ */
 function islandora_digitization_requests_webform_components($nid) {
   $webform_components = array();
   $query = db_select('webform_component', 'wc')->fields('wc');

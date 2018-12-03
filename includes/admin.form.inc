@@ -44,7 +44,7 @@ function islandora_digitization_requests_admin_form() {
       'webform_' . $nid . '_is_digitization_request' => array(
         '#title' => '"' . $webform_arr['title'] . '" is a Digitization Request?',
         '#type' => 'checkbox',
-        '#prefix' => '<ul class="action-links"><li>' . l('Create new "' . $webform_arr['title'] . '"', '/node/' . $nid, $link_attributes) . '</li></ul>',
+        '#suffix' => '<span class="action-links">' . l('Create new "' . $webform_arr['title'] . '"', '/node/' . $nid, $link_attributes) . '</span><br>',
         '#default_value' => $webform_options[$nid]['selected'],
       ),
     );

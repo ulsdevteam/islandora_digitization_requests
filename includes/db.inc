@@ -49,7 +49,7 @@ function islandora_digitization_requests_get_scan_request_webforms($webforms) {
   $webform_options = variable_get('islandora_digitization_requests_webform_forms', array());
   $filtered_webforms = array();
   foreach ($webforms as $nid => $title_arr) {
-    if ($webform_options[$nid]['selected']) {
+    if (isset($webform_options[$nid]) && $webform_options[$nid]['selected']) {
       $filtered_webforms[$nid] = $title_arr;
     }
   }
@@ -79,4 +79,26 @@ function islandora_digitization_requests_webform_components($nid) {
     $webform_components[$data->cid] = (array)$data;
   }
   return $webform_components;
+}
+
+/**
+ * This will return the data for a single Webform submission.
+ *
+ * @param type $sid
+ *   The submission record's identifier value.
+ * @return array of webform submission data for the given $sid.
+ */
+function islandora_digital_requests_get_webform_submission($sid) {
+  $webform_submission = array();
+  $query = db_select('webform_submitted_data', 'wsd')->fields('wsd');
+  $query->condition('wsd.sid', $sid);
+  $query->leftJoin('webform_submissions', 'ws', 'ws.sid = wsd.sid');
+  $query->leftJoin('users', 'u', 'u.uid = ws.uid');
+  $query->addField('u', 'name', 'drupal_username');
+  $query->orderBy('wsd.cid');
+  $result = $query->execute();
+  foreach ($result as $data) {
+    $webform_submission[$data->cid] = (array)$data;
+  }
+  return $webform_submission;
 }

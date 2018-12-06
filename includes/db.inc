@@ -94,6 +94,7 @@ function islandora_digital_requests_get_webform_submission($sid, $include_compon
   $query->condition('wsd.sid', $sid);
   if ($include_component_fieldname) {
     $query->leftJoin('webform_component', 'wc', 'wsd.nid = wc.nid AND wsd.cid = wc.cid');
+    $query->addField('wc', 'form_key', 'form_key');
     $query->addField('wc', 'name', 'component_name');
   }
   $query->leftJoin('webform_submissions', 'ws', 'ws.sid = wsd.sid');

@@ -88,10 +88,14 @@ function islandora_digitization_requests_webform_components($nid) {
  *   The submission record's identifier value.
  * @return array of webform submission data for the given $sid.
  */
-function islandora_digital_requests_get_webform_submission($sid) {
+function islandora_digital_requests_get_webform_submission($sid, $include_component_fieldname = FALSE) {
   $webform_submission = array();
   $query = db_select('webform_submitted_data', 'wsd')->fields('wsd');
   $query->condition('wsd.sid', $sid);
+  if ($include_component_fieldname) {
+    $query->leftJoin('webform_component', 'wc', 'wsd.nid = wc.nid AND wsd.cid = wc.cid');
+    $query->addField('wc', 'name', 'component_name');
+  }
   $query->leftJoin('webform_submissions', 'ws', 'ws.sid = wsd.sid');
   $query->leftJoin('users', 'u', 'u.uid = ws.uid');
   $query->addField('u', 'name', 'drupal_username');
@@ -102,3 +106,4 @@ function islandora_digital_requests_get_webform_submission($sid) {
   }
   return $webform_submission;
 }
+

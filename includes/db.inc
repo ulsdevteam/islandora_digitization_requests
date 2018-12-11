@@ -43,7 +43,7 @@ function islandora_digitization_requests_get_webforms() {
  * @return array of key-value
  *   $nid => $title
  */
-function islandora_digitization_requests_get_scan_request_webforms($webforms) {
+function islandora_digitization_requests_get_digitization_request_webforms($webforms) {
   // Get the configuration -- to check each of the webform nodes to see whether
   // or not they are selected as "Digitization Request Webforms".
   $webform_options = variable_get('islandora_digitization_requests_webform_forms', array());

@@ -88,7 +88,7 @@ function islandora_digitization_requests_webform_components($nid) {
  *   The submission record's identifier value.
  * @return array of webform submission data for the given $sid.
  */
-function islandora_digital_requests_get_webform_submission($sid, $include_component_fieldname = FALSE) {
+function islandora_digitization_requests_get_webform_submission($sid, $include_component_fieldname = FALSE) {
   $webform_submission = array();
   $query = db_select('webform_submitted_data', 'wsd')->fields('wsd');
   $query->condition('wsd.sid', $sid);

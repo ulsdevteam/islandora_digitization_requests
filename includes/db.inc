@@ -103,7 +103,7 @@ function islandora_digitization_requests_get_webform_submission($sid, $include_c
   $query->orderBy('wsd.cid');
   $result = $query->execute();
   foreach ($result as $data) {
-    $webform_submission[$data->cid] = (array)$data;
+    $webform_submission[$data->cid][] = (array)$data;
   }
   return $webform_submission;
 }
